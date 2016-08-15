@@ -1,21 +1,30 @@
 import Html exposing (..)
-import Html.App as App
+-- import Html.App as App
 import Color exposing (Color)
-import Collage exposing (toForm, Form, rect)
+-- import Collage exposing (toForm, Form, rect, square)
+import Collage exposing (..)
+import Element exposing (..)
 -- import Html.Attributes exposing (..)
 -- import Html.Events exposing (..)
 -- import Http
 -- import Task
 -- import Json.Decode as Json
 
-main : Program Never
+-- main : Program Never
+-- main =
+--   App.program
+--     { init = init
+--     , view = view
+--     , update = update
+--     , subscriptions = subscriptions
+--     }
+
+main : Html Msg
 main =
-  App.program
-    { init = init
-    , view = view
-    , update = update
-    , subscriptions = subscriptions
-    }
+  [initCell]
+    |> List.map cellToForm
+    |> collage 400 400
+    |> toHtml
 
 type alias Model =
   { myField : Field
@@ -33,10 +42,16 @@ type alias Cell =
   , color: Color
   }
 
--- fieldToForm : Field -> Form
--- fieldToForm field =
---   let
---     shape = rect
+cellToForm : Cell -> Form
+cellToForm cell =
+  let
+    shape = square cell.size
+    border = outlined (solid Color.lightBlue) shape
+  in
+    group
+      [ filled cell.color shape
+      , border
+      ]
 
 initField : Field
 initField =
@@ -51,7 +66,7 @@ initField =
 
 initCell : Cell
 initCell =
-  { size = 10.0
+  { size = 20.0
   , color = Color.darkBlue
   }
 
