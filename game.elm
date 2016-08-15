@@ -1,9 +1,9 @@
 import Html exposing (..)
 -- import Html.App as App
-import Color exposing (Color)
 -- import Collage exposing (toForm, Form, rect, square)
 import Collage exposing (..)
 import Element exposing (..)
+import Cell exposing (..)
 -- import Html.Attributes exposing (..)
 -- import Html.Events exposing (..)
 -- import Http
@@ -37,22 +37,6 @@ type alias Field =
   , cells : List Cell
   }
 
-type alias Cell =
-  { size : Float
-  , color: Color
-  }
-
-cellToForm : Cell -> Form
-cellToForm cell =
-  let
-    shape = square cell.size
-    border = outlined (solid Color.lightBlue) shape
-  in
-    group
-      [ filled cell.color shape
-      , border
-      ]
-
 initField : Field
 initField =
   let
@@ -63,12 +47,6 @@ initField =
     , vSize = vSize
     , cells = List.map (always initCell) [0..(hSize * vSize)]
     }
-
-initCell : Cell
-initCell =
-  { size = 20.0
-  , color = Color.darkBlue
-  }
 
 init : (Model, Cmd Msg)
 init =
