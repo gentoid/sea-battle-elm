@@ -3,7 +3,7 @@ import Html exposing (..)
 -- import Collage exposing (toForm, Form, rect, square)
 import Collage exposing (..)
 import Element exposing (..)
-import Cell exposing (..)
+import Cell as Cell
 -- import Html.Attributes exposing (..)
 -- import Html.Events exposing (..)
 -- import Http
@@ -21,8 +21,8 @@ import Cell exposing (..)
 
 main : Html Msg
 main =
-  [initCell]
-    |> List.map cellToForm
+  [Cell.init]
+    |> List.map Cell.toForm
     |> collage 400 400
     |> toHtml
 
@@ -34,7 +34,7 @@ type alias Model =
 type alias Field =
   { hSize : Int
   , vSize : Int
-  , cells : List Cell
+  , cells : List Cell.Model
   }
 
 initField : Field
@@ -45,7 +45,7 @@ initField =
   in
     { hSize = hSize
     , vSize = vSize
-    , cells = List.map (always initCell) [0..(hSize * vSize)]
+    , cells = List.map (always Cell.init) [0..(hSize * vSize)]
     }
 
 init : (Model, Cmd Msg)

@@ -1,21 +1,20 @@
-module Cell exposing (Cell, initCell, cellToForm)
+module Cell exposing (Model, init, toForm)
 
 import Color exposing (Color)
 import Collage exposing (..)
 
-type alias Cell =
+type alias Model =
   { size : Float
   , color: Color
   }
 
-initCell : Cell
-initCell =
+init : Model
+init =
   { size = 20.0
   , color = Color.darkBlue
   }
-
-cellToForm : Cell -> Form
-cellToForm cell =
+toForm : Model -> Form
+toForm cell =
   let
     shape = square cell.size
     border = outlined (solid Color.lightBlue) shape
