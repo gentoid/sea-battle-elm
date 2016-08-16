@@ -4,6 +4,7 @@ import Html exposing (..)
 import Collage exposing (..)
 import Element exposing (..)
 import Cell as Cell
+import Field as Field
 -- import Html.Attributes exposing (..)
 -- import Html.Events exposing (..)
 -- import Http
@@ -27,31 +28,14 @@ main =
     |> toHtml
 
 type alias Model =
-  { myField : Field
-  , otherField : Field
+  { myField : Field.Model
+  , otherField : Field.Model
   }
-
-type alias Field =
-  { hSize : Int
-  , vSize : Int
-  , cells : List Cell.Model
-  }
-
-initField : Field
-initField =
-  let
-    hSize = 10
-    vSize = 10
-  in
-    { hSize = hSize
-    , vSize = vSize
-    , cells = List.map (always Cell.init) [0..(hSize * vSize)]
-    }
 
 init : (Model, Cmd Msg)
 init =
-  ( { myField = initField
-    , otherField = initField
+  ( { myField = Field.init
+    , otherField = Field.init
     }
   , Cmd.none
   )
