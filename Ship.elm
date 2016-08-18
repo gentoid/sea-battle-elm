@@ -12,6 +12,20 @@ type alias Model =
   , block : ShipBlock.Model
   }
 
+init : Int -> Int -> Model
+init column length =
+  let
+    createShape length =
+      case length of
+        0 ->
+          []
+
+        _ ->
+          ((length - 1), column) :: createShape (length - 1)
+
+  in
+    Model (createShape length) ShipBlock.init
+
 toForm : Model -> Form
 toForm {shape, block} =
   let
