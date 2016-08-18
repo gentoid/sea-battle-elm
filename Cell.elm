@@ -1,7 +1,10 @@
-module Cell exposing (Model, init, toForm)
+module Cell exposing (Model, init, toForm, size)
 
 import Color exposing (Color)
 import Collage exposing (..)
+
+size : Float
+size = 20.0
 
 type alias Model =
   { size : Float
@@ -10,9 +13,10 @@ type alias Model =
 
 init : Model
 init =
-  { size = 20.0
+  { size = size
   , color = Color.darkBlue
   }
+
 toForm : Model -> Form
 toForm cell =
   let
