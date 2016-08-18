@@ -1,7 +1,5 @@
 module Field exposing (..)
 
-import Collage exposing (..)
-import Element exposing (..)
 import Cell as Cell
 
 type alias Model =
