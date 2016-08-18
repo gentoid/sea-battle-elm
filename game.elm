@@ -3,8 +3,9 @@ import Html exposing (..)
 -- import Collage exposing (toForm, Form, rect, square)
 import Collage exposing (..)
 import Element exposing (..)
-import Cell as Cell
-import Field as Field
+import Field
+import Ship
+import ShipBlock
 -- import Html.Attributes exposing (..)
 -- import Html.Events exposing (..)
 -- import Http
@@ -20,10 +21,21 @@ import Field as Field
 --     , subscriptions = subscriptions
 --     }
 
+
+ship : Ship.Model
+ship =
+  { shape =
+    [ (1, 0)
+    , (0, 0)
+    , (-1, 0)
+    , (-2, 0)
+    ]
+  , block = ShipBlock.init
+  }
+
 main : Html Msg
 main =
-  [Cell.init]
-    |> List.map Cell.toForm
+  [Ship.toForm ship]
     |> collage 400 400
     |> toHtml
 
