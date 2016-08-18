@@ -1,6 +1,25 @@
 module Field exposing (..)
 
-import Cell as Cell
+import Cell
+import Ship
+
+rows : Int
+rows = 10
+
+columns : Int
+columns = 10
+
+createShips : List Ship.Model
+createShips =
+  let
+    ships n =
+      (5 - n)
+      |> Ship.init n
+      |> List.repeat n
+
+  in
+    List.map ships [1..4]
+    |> List.foldr (++) []
 
 type alias Model =
   { hSize : Int
