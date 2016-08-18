@@ -5,7 +5,6 @@ import Collage exposing (..)
 import Element exposing (..)
 import Field
 import Ship
-import ShipBlock
 -- import Html.Attributes exposing (..)
 -- import Html.Events exposing (..)
 -- import Http
@@ -21,21 +20,10 @@ import ShipBlock
 --     , subscriptions = subscriptions
 --     }
 
-
-ship : Ship.Model
-ship =
-  { shape =
-    [ (1, 0)
-    , (0, 0)
-    , (-1, 0)
-    , (-2, 0)
-    ]
-  , block = ShipBlock.init
-  }
-
 main : Html Msg
 main =
-  [Ship.toForm ship]
+  Field.createShips
+    |> List.map Ship.toForm
     |> collage 400 400
     |> toHtml
 
