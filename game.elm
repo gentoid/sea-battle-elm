@@ -3,7 +3,7 @@ import Html exposing (..)
 -- import Collage exposing (toForm, Form, rect, square)
 import Collage exposing (..)
 import Element exposing (..)
-import Field
+import Board
 import Ship
 -- import Html.Attributes exposing (..)
 -- import Html.Events exposing (..)
@@ -22,20 +22,20 @@ import Ship
 
 main : Html Msg
 main =
-  Field.createShips
+  Board.createShips
     |> List.map Ship.toForm
     |> collage 400 400
     |> toHtml
 
 type alias Model =
-  { myField : Field.Model
-  , otherField : Field.Model
+  { myBoard : Board.Model
+  , otherBoard : Board.Model
   }
 
 init : (Model, Cmd Msg)
 init =
-  ( { myField = Field.init
-    , otherField = Field.init
+  ( { myBoard = Board.init
+    , otherBoard = Board.init
     }
   , Cmd.none
   )

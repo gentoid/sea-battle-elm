@@ -1,4 +1,4 @@
-module Field exposing (..)
+module Board exposing (..)
 
 import Cell
 import Ship
