@@ -1,4 +1,4 @@
-module Board exposing (..)
+module Field exposing (..)
 import Color exposing (Color)
 import Collage exposing (..)
 
@@ -65,10 +65,10 @@ toForm model =
   --   |> collage 400 400
 
   let
-    board = rect model.width model.height
-    border = outlined (solid Color.black) board
+    field = rect model.width model.height
+    border = outlined (solid Color.black) field
   in
     group
-      [ filled color board
+      [ filled color field
       , border
       ]

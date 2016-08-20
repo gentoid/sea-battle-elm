@@ -3,7 +3,7 @@ import Html.App as App
 -- import Collage exposing (toForm, Form, rect, square)
 import Collage exposing (..)
 import Element exposing (..)
-import Board
+import Field
 -- import Ship
 -- import Html.Attributes exposing (..)
 -- import Html.Events exposing (..)
@@ -21,8 +21,8 @@ main =
     }
 
 type alias Model =
-  { myBoard : Board.Model
-  , otherBoard : Board.Model
+  { myField : Field.Model
+  , otherField : Field.Model
   }
 
 freeSpace : Float
@@ -30,8 +30,8 @@ freeSpace  = 20
 
 init : (Model, Cmd Msg)
 init =
-  ( { myBoard = Board.initialModel Board.My
-    , otherBoard = Board.initialModel Board.Opponent
+  ( { myField = Field.initialModel Field.My
+    , otherField = Field.initialModel Field.Opponent
     }
   , Cmd.none
   )
@@ -45,20 +45,20 @@ update msg model =
     None ->
       (model, Cmd.none)
 
-boardToForm : Board.Model -> Form
-boardToForm board =
-  case board.side of
-    Board.My ->
-      Board.toForm board |> moveX (-(board.width + freeSpace) / 2)
+fieldToForm : Field.Model -> Form
+fieldToForm field =
+  case field.side of
+    Field.My ->
+      Field.toForm field |> moveX (-(field.width + freeSpace) / 2)
 
-    Board.Opponent ->
-      Board.toForm board |> moveX ((board.width + freeSpace) / 2)
+    Field.Opponent ->
+      Field.toForm field |> moveX ((field.width + freeSpace) / 2)
 
 view : Model -> Html Msg
 view model =
-  [ model.myBoard, model.otherBoard ]
-    |> List.map boardToForm
-    |> collage (round (freeSpace * 3 + model.myBoard.width + model.otherBoard.width)) (round (freeSpace * 2 + model.myBoard.width))
+  [ model.myField, model.otherField ]
+    |> List.map fieldToForm
+    |> collage (round (freeSpace * 3 + model.myField.width + model.otherField.width)) (round (freeSpace * 2 + model.myField.width))
     |> toHtml
 
 subscriptions : Model -> Sub Msg
