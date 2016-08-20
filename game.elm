@@ -1,31 +1,24 @@
 import Html exposing (..)
--- import Html.App as App
+import Html.App as App
 -- import Collage exposing (toForm, Form, rect, square)
 import Collage exposing (..)
 import Element exposing (..)
 import Board
-import Ship
+-- import Ship
 -- import Html.Attributes exposing (..)
 -- import Html.Events exposing (..)
 -- import Http
 -- import Task
 -- import Json.Decode as Json
 
--- main : Program Never
--- main =
---   App.program
---     { init = init
---     , view = view
---     , update = update
---     , subscriptions = subscriptions
---     }
-
-main : Html Msg
+main : Program Never
 main =
-  Board.createShips
-    |> List.map Ship.toForm
-    |> collage 400 400
-    |> toHtml
+  App.program
+    { init = init
+    , view = view
+    , update = update
+    , subscriptions = subscriptions
+    }
 
 type alias Model =
   { myBoard : Board.Model
@@ -34,8 +27,8 @@ type alias Model =
 
 init : (Model, Cmd Msg)
 init =
-  ( { myBoard = Board.init
-    , otherBoard = Board.init
+  ( { myBoard = Board.initialModel Board.My
+    , otherBoard = Board.initialModel Board.Opponent
     }
   , Cmd.none
   )
@@ -51,7 +44,9 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-  div [] []
+  [ Board.toForm model.myBoard ]
+    |> collage 400 400
+    |> toHtml
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
