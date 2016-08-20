@@ -1,4 +1,6 @@
 module Board exposing (..)
+import Color exposing (Color)
+import Collage exposing (..)
 
 import Cell
 import Ship
@@ -8,6 +10,9 @@ rows = 10
 
 columns : Int
 columns = 10
+
+color : Color
+color = Color.lightBlue
 
 createShips : List Ship.Model
 createShips =
@@ -22,18 +27,33 @@ createShips =
     |> List.foldr (++) []
 
 type alias Model =
-  { hSize : Int
-  , vSize : Int
-  , cells : List Cell.Model
+  { ships : List Ship.Model
   }
 
-init : Model
-init =
+type Side
+  = My
+  | Opponent
+
+initialModel : Side -> Model
+initialModel side =
+  case side of
+    My ->
+      { ships = createShips }
+
+    Opponent ->
+      { ships = [] }
+
+toForm : Model -> Form
+toForm model =
+  -- model.ships
+  --   |> List.map Ship.toForm
+  --   |> collage 400 400
+
   let
-    hSize = 10
-    vSize = 10
+    board = rect ((toFloat columns) * Cell.size) ((toFloat rows) * Cell.size)
+    border = outlined (solid Color.lightBlue) board
   in
-    { hSize = hSize
-    , vSize = vSize
-    , cells = List.map (always Cell.init) [0..(hSize * vSize)]
-    }
+    group
+      [ filled color board
+      , border
+      ]
