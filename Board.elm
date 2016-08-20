@@ -28,6 +28,9 @@ createShips =
 
 type alias Model =
   { ships : List Ship.Model
+  , side : Side
+  , width : Float
+  , height : Float
   }
 
 type Side
@@ -36,12 +39,24 @@ type Side
 
 initialModel : Side -> Model
 initialModel side =
-  case side of
-    My ->
-      { ships = createShips }
+  let
+    toDimension n =
+      (toFloat n) * Cell.size
 
-    Opponent ->
-      { ships = [] }
+    model =
+      { ships = []
+      , side = side
+      , width = toDimension columns
+      , height = toDimension rows
+      }
+
+  in
+    case side of
+      My ->
+        { model | ships = createShips }
+
+      Opponent ->
+        model
 
 toForm : Model -> Form
 toForm model =
@@ -50,8 +65,8 @@ toForm model =
   --   |> collage 400 400
 
   let
-    board = rect ((toFloat columns) * Cell.size) ((toFloat rows) * Cell.size)
-    border = outlined (solid Color.lightBlue) board
+    board = rect model.width model.height
+    border = outlined (solid Color.black) board
   in
     group
       [ filled color board
