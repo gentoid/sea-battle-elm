@@ -33,3 +33,7 @@ toElement model =
   [ model.myField, model.otherField ]
     |> List.map fieldToForm
     |> collage (round (freeSpace * 3 + model.myField.width + model.otherField.width)) (round (freeSpace * 2 + model.myField.width))
+
+addNextShip : Model -> Model
+addNextShip model =
+  { model | myField = Field.addNextShip model.myField }

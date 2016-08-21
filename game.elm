@@ -1,5 +1,6 @@
 import Html exposing (..)
 import Html.App as App
+import Html.Events exposing (onClick)
 import Element exposing (toHtml)
 
 import Board
@@ -26,6 +27,7 @@ init =
 
 type Msg
   = None
+  | AddNextShip
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
@@ -33,10 +35,24 @@ update msg model =
     None ->
       (model, Cmd.none)
 
+    AddNextShip ->
+      ( { model
+          | board = Board.addNextShip model.board
+        }
+      , Cmd.none
+      )
+
 view : Model -> Html Msg
 view model =
-  Board.toElement model.board
-    |> toHtml
+  div []
+    [ Board.toElement model.board
+      |> toHtml
+    , button [ onClick AddNextShip ] [ text "Next ship" ]
+    , div []
+      [ text "Ships:"
+      , model |> toString |> text
+      ]
+    ]
 
 subscriptions : Model -> Sub Msg
 subscriptions model =

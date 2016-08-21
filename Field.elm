@@ -14,6 +14,11 @@ columns = 10
 color : Color
 color = Color.lightBlue
 
+shipLengths : List Int
+shipLengths =
+  List.map (\n -> List.repeat n (5 - n)) [1..4]
+  |> List.foldr (++) []
+
 createShips : List Ship.Model
 createShips =
   let
@@ -27,11 +32,14 @@ createShips =
     |> List.foldr (++) []
 
 type alias Model =
-  { ships : List Ship.Model
+  { ships : Ships
   , side : Side
   , width : Float
   , height : Float
   }
+
+type alias Ships =
+  List Ship.Model
 
 type Side
   = My
@@ -53,7 +61,7 @@ initialModel side =
   in
     case side of
       My ->
-        { model | ships = createShips }
+        model
 
       Opponent ->
         model
@@ -72,3 +80,20 @@ toForm model =
       [ filled color field
       , border
       ]
+
+addNextShip : Model -> Model
+addNextShip model =
+  let
+    nextShipLength =
+      List.drop (List.length model.ships) shipLengths
+      |> List.head
+      |> Maybe.withDefault 0
+  in
+    case nextShipLength of
+      0 ->
+        model
+
+      _ ->
+        { model
+          | ships = (Ship.init 0 nextShipLength) :: model.ships
+        }
