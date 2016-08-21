@@ -66,11 +66,20 @@ blockToForm block =
 
 rotate : Model -> Model
 rotate ship =
-  { ship
-    | shape = List.map (\(row, col) -> (-col, row)) ship.shape
-    , rows = ship.cols
-    , cols = ship.rows
-  }
+  let
+    (baseRow, baseCol) = ship.base
+    translate (row, col) =
+      let
+        newRow = baseRow - col + baseCol
+        newCol = baseCol + row - baseRow
+      in
+        (newRow, newCol)
+  in
+    { ship
+      | shape = List.map translate ship.shape
+      , rows = ship.cols
+      , cols = ship.rows
+    }
 
 moveTo : Model -> Direction -> Model
 moveTo model direction =
