@@ -1,15 +1,20 @@
 module Ship exposing (..)
 
 import Collage exposing (..)
-import ShipBlock
-import Cell
+import Color exposing (Color)
 import List
+
+import Cell
 
 type alias Location = (Int, Int)
 
 type alias Model =
   { shape : List Location
-  , block : ShipBlock.Model
+  }
+
+type alias Block =
+  { color : Color
+  , borderColor : Color
   }
 
 init : Int -> Int -> Model
@@ -24,13 +29,17 @@ init column length =
           ((length - 1), column) :: createShape (length - 1)
 
   in
-    Model (createShape length) ShipBlock.init
+    Model (createShape length)
+
+initBlock : Block
+initBlock =
+  Block Color.black Color.white
 
 toForm : Model -> Form
-toForm {shape, block} =
+toForm {shape} =
   let
     form =
-      ShipBlock.toForm block
+      blockToForm initBlock
 
     toCoordinate dim =
       (toFloat dim) * Cell.size
@@ -43,3 +52,14 @@ toForm {shape, block} =
 
   in
     group forms
+
+blockToForm : Block -> Form
+blockToForm block =
+  let
+    shape = square Cell.size
+    border = outlined (solid block.borderColor) shape
+  in
+    group
+      [ filled block.color shape
+      , border
+      ]
