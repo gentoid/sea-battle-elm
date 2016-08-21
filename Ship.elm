@@ -4,7 +4,7 @@ import Collage exposing (..)
 import Color exposing (Color)
 import List
 
-import Cell
+import Common
 
 type alias Location = (Int, Int)
 
@@ -45,7 +45,7 @@ toForm {shape} =
       blockToForm initBlock
 
     toCoordinate dim =
-      (toFloat dim) * Cell.size
+      (toFloat dim) * Common.cellSize
 
     translate (row, column) =
       move ((toCoordinate column), (toCoordinate row)) form
@@ -59,7 +59,7 @@ toForm {shape} =
 blockToForm : Block -> Form
 blockToForm block =
   let
-    shape = square Cell.size
+    shape = square Common.cellSize
     border = outlined (solid block.borderColor) shape
   in
     group

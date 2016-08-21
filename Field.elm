@@ -2,14 +2,8 @@ module Field exposing (..)
 import Color exposing (Color)
 import Collage exposing (..)
 
-import Cell
+import Common
 import Ship
-
-rows : Int
-rows = 10
-
-columns : Int
-columns = 10
 
 color : Color
 color = Color.lightBlue
@@ -50,13 +44,13 @@ initialModel : Side -> Model
 initialModel side =
   let
     toDimension n =
-      (toFloat n) * Cell.size
+      (toFloat n) * Common.cellSize
 
     model =
       { ships = []
       , side = side
-      , width = toDimension columns
-      , height = toDimension rows
+      , width = toDimension Common.fieldCols
+      , height = toDimension Common.fieldRows
       , shiftAt = (0, 0)
       }
 
