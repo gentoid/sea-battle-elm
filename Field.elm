@@ -73,10 +73,12 @@ toForm model =
   let
     field = rect model.width model.height
     border = outlined (solid Color.black) field
+    ships = List.map Ship.toForm model.ships
   in
     group
       [ filled color field
       , border
+      , group ships
       ]
     |> move model.shiftAt
 
