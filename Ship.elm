@@ -4,7 +4,7 @@ import Collage exposing (..)
 import Color exposing (Color)
 import List
 
-import Common exposing (shiftShip, toDimension, cellSize, Direction(..))
+import Common exposing (shiftShip, toDimension, cellSize, Direction(..), fieldRows, fieldCols)
 
 type alias Location = (Int, Int)
 
@@ -68,21 +68,26 @@ rotate : Model -> Model
 rotate ship =
   let
     (baseRow, baseCol) = ship.base
+
     translate (row, col) =
       let
         newRow = baseRow - col + baseCol
         newCol = baseCol + row - baseRow
       in
         (newRow, newCol)
+
+    newShip =
+      { ship
+        | shape = List.map translate ship.shape
+        , rows = ship.cols
+        , cols = ship.rows
+      }
+
   in
-    { ship
-      | shape = List.map translate ship.shape
-      , rows = ship.cols
-      , cols = ship.rows
-    }
+    newShipIfInsideField ship newShip
 
 moveTo : Model -> Direction -> Model
-moveTo model direction =
+moveTo ship direction =
   let
     movement (row, col) =
       case direction of
@@ -91,5 +96,26 @@ moveTo model direction =
         Right -> (row,     col + 1 )
         Down  -> (row + 1, col     )
 
+    newShip =
+      { ship
+        | shape = List.map movement ship.shape
+        , base = movement ship.base
+      }
+
   in
-    { model | shape = List.map movement model.shape, base = movement model.base }
+    newShipIfInsideField ship newShip
+
+newShipIfInsideField : Model -> Model -> Model
+newShipIfInsideField ship newShip =
+  case isOutOfField newShip of
+    True  -> ship
+    False -> newShip
+
+isOutOfField : Model -> Bool
+isOutOfField ship =
+  let
+    pointIsOutOfField (row, col) =
+      row < 0 || row >= fieldRows || col < 0 || col >= fieldCols
+
+  in
+    List.any pointIsOutOfField ship.shape
