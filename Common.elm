@@ -24,3 +24,11 @@ fieldWidth =
 fieldHeight : Float
 fieldHeight =
   toDimension fieldRows
+
+shiftShip : (Float, Float)
+shiftShip =
+  let
+    shiftX = -(fieldWidth - cellSize) / 2
+    shiftY = (fieldHeight - cellSize) / 2
+  in
+    (shiftX, shiftY)

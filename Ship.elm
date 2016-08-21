@@ -4,7 +4,7 @@ import Collage exposing (..)
 import Color exposing (Color)
 import List
 
-import Common
+import Common exposing (shiftShip)
 
 type alias Location = (Int, Int)
 
@@ -54,7 +54,7 @@ toForm {shape} =
       List.map translate shape
 
   in
-    group forms
+    group forms |> move shiftShip
 
 blockToForm : Block -> Form
 blockToForm block =
