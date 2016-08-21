@@ -97,3 +97,24 @@ addNextShip model =
         { model
           | ships = (Ship.init 0 nextShipLength) :: model.ships
         }
+
+rotateCurrentShip : Model -> Model
+rotateCurrentShip model =
+  { model | ships = rotateFirstShip model.ships }
+
+rotateFirstShip : Ships -> Ships
+rotateFirstShip ships =
+  let
+    firstShip = List.head ships
+
+  in
+    case firstShip of
+      Nothing ->
+        ships
+
+      Just ship ->
+        let
+          rotated = Ship.rotate ship
+          otherShips = List.tail ships |> Maybe.withDefault []
+        in
+          rotated :: otherShips

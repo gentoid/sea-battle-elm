@@ -37,3 +37,7 @@ toElement model =
 addNextShip : Model -> Model
 addNextShip model =
   { model | myField = Field.addNextShip model.myField }
+
+rotateCurrentShip : Model -> Model
+rotateCurrentShip model =
+  { model | myField = Field.rotateCurrentShip model.myField }

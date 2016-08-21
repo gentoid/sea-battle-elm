@@ -2,6 +2,7 @@ import Html exposing (..)
 import Html.App as App
 import Html.Events exposing (onClick)
 import Element exposing (toHtml)
+import Keyboard
 
 import Board
 
@@ -28,6 +29,8 @@ init =
 type Msg
   = None
   | AddNextShip
+  | KeyMsg Keyboard.KeyCode
+  | RotateShip
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
@@ -38,6 +41,21 @@ update msg model =
     AddNextShip ->
       ( { model
           | board = Board.addNextShip model.board
+        }
+      , Cmd.none
+      )
+
+    KeyMsg keyCode ->
+      case keyCode of
+        32 -> -- spacebar
+          update RotateShip model
+
+        _ ->
+          (model, Cmd.none)
+
+    RotateShip ->
+      ( { model
+        | board = Board.rotateCurrentShip model.board
         }
       , Cmd.none
       )
@@ -56,4 +74,6 @@ view model =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-  Sub.none
+  Sub.batch [
+    Keyboard.presses KeyMsg
+  ]

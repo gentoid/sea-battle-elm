@@ -10,6 +10,9 @@ type alias Location = (Int, Int)
 
 type alias Model =
   { shape : List Location
+  , base : Location
+  , rows : Int
+  , cols : Int
   }
 
 type alias Block =
@@ -29,7 +32,7 @@ init column length =
           ((length - 1), column) :: createShape (length - 1)
 
   in
-    Model (createShape length)
+    Model (createShape length) (0, 0) length 1
 
 initBlock : Block
 initBlock =
@@ -63,3 +66,11 @@ blockToForm block =
       [ filled block.color shape
       , border
       ]
+
+rotate : Model -> Model
+rotate ship =
+  { ship
+    | shape = List.map (\(row, col) -> (col, -row)) ship.shape
+    , rows = ship.cols
+    , cols = ship.rows
+  }
