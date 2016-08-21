@@ -36,6 +36,7 @@ type alias Model =
   , side : Side
   , width : Float
   , height : Float
+  , shiftAt : (Float, Float)
   }
 
 type alias Ships =
@@ -56,6 +57,7 @@ initialModel side =
       , side = side
       , width = toDimension columns
       , height = toDimension rows
+      , shiftAt = (0, 0)
       }
 
   in
@@ -68,10 +70,6 @@ initialModel side =
 
 toForm : Model -> Form
 toForm model =
-  -- model.ships
-  --   |> List.map Ship.toForm
-  --   |> collage 400 400
-
   let
     field = rect model.width model.height
     border = outlined (solid Color.black) field
@@ -80,6 +78,7 @@ toForm model =
       [ filled color field
       , border
       ]
+    |> move model.shiftAt
 
 addNextShip : Model -> Model
 addNextShip model =

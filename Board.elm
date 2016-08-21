@@ -15,24 +15,27 @@ type alias Model =
 
 initialModel : Model
 initialModel =
-  { myField = Field.initialModel Field.My
-  , otherField = Field.initialModel Field.Opponent
-  }
+  let
+    shiftX field =
+      (field.width + freeSpace) / 2
 
-fieldToForm : Field.Model -> Form
-fieldToForm field =
-  case field.side of
-    Field.My ->
-      Field.toForm field |> moveX (-(field.width + freeSpace) / 2)
+    shiftField field =
+      case field.side of
+        Field.My ->
+          { field | shiftAt = (shiftX field, 0) }
 
-    Field.Opponent ->
-      Field.toForm field |> moveX ((field.width + freeSpace) / 2)
+        Field.Opponent ->
+          { field | shiftAt = (-(shiftX field), 0) }
+  in
+    { myField = Field.initialModel Field.My |> shiftField
+    , otherField = Field.initialModel Field.Opponent |> shiftField
+    }
 
 toElement : Model -> Element
 toElement model =
   [ model.myField, model.otherField ]
-    |> List.map fieldToForm
-    |> collage (round (freeSpace * 3 + model.myField.width + model.otherField.width)) (round (freeSpace * 2 + model.myField.width))
+    |> List.map Field.toForm
+    |> collage (round (freeSpace * 3 + model.myField.width + model.otherField.width)) (round (freeSpace * 2 + model.myField.height))
 
 addNextShip : Model -> Model
 addNextShip model =

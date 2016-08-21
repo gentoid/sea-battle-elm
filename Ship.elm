@@ -32,7 +32,7 @@ init column length =
           ((length - 1), column) :: createShape (length - 1)
 
   in
-    Model (createShape length) (0, 0) length 1
+    Model (createShape length) (0, 0) 1 length
 
 initBlock : Block
 initBlock =
