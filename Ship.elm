@@ -45,7 +45,7 @@ toForm {shape} =
       blockToForm initBlock
 
     translate (row, column) =
-      move (toDimension column, toDimension row) form
+      move (toDimension column, toDimension -row) form
 
     forms =
       List.map translate shape
@@ -75,12 +75,12 @@ rotate ship =
 moveTo : Model -> Direction -> Model
 moveTo model direction =
   let
-    movement (x, y) =
+    movement (row, col) =
       case direction of
-        Left  -> (x - 1, y    )
-        Up    -> (x,     y - 1)
-        Right -> (x + 1, y    )
-        Down  -> (x,     y + 1)
+        Left  -> (row,     col - 1 )
+        Up    -> (row - 1, col     )
+        Right -> (row,     col + 1 )
+        Down  -> (row + 1, col     )
 
   in
     { model | shape = List.map movement model.shape, base = movement model.base }
