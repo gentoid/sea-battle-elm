@@ -3,10 +3,8 @@ module Board exposing (..)
 import Collage exposing (..)
 import Element exposing (..)
 
+import Common exposing (boardFreeSpace, fieldWidth, fieldHeight)
 import Field
-
-freeSpace : Float
-freeSpace  = 20
 
 type alias Model =
   { myField : Field.Model
@@ -17,7 +15,7 @@ initialModel : Model
 initialModel =
   let
     shiftX field =
-      (field.width + freeSpace) / 2
+      (fieldWidth + boardFreeSpace) / 2
 
     shiftField field =
       case field.side of
@@ -35,7 +33,7 @@ toElement : Model -> Element
 toElement model =
   [ model.myField, model.otherField ]
     |> List.map Field.toForm
-    |> collage (round (freeSpace * 3 + model.myField.width + model.otherField.width)) (round (freeSpace * 2 + model.myField.height))
+    |> collage (round (boardFreeSpace * 3 + fieldWidth * 2)) (round (boardFreeSpace * 2 + fieldHeight))
 
 addNextShip : Model -> Model
 addNextShip model =

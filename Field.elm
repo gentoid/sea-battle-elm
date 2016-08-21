@@ -2,7 +2,7 @@ module Field exposing (..)
 import Color exposing (Color)
 import Collage exposing (..)
 
-import Common
+import Common exposing (fieldWidth, fieldHeight)
 import Ship
 
 color : Color
@@ -28,8 +28,6 @@ createShips =
 type alias Model =
   { ships : Ships
   , side : Side
-  , width : Float
-  , height : Float
   , shiftAt : (Float, Float)
   }
 
@@ -43,14 +41,9 @@ type Side
 initialModel : Side -> Model
 initialModel side =
   let
-    toDimension n =
-      (toFloat n) * Common.cellSize
-
     model =
       { ships = []
       , side = side
-      , width = toDimension Common.fieldCols
-      , height = toDimension Common.fieldRows
       , shiftAt = (0, 0)
       }
 
@@ -65,7 +58,7 @@ initialModel side =
 toForm : Model -> Form
 toForm model =
   let
-    field = rect model.width model.height
+    field = rect fieldWidth fieldHeight
     border = outlined (solid Color.black) field
     ships = List.map Ship.toForm model.ships
   in
