@@ -22,10 +22,10 @@ initialModel =
     shiftField field =
       case field.side of
         Field.My ->
-          { field | shiftAt = (shiftX field, 0) }
+          { field | shiftAt = (-(shiftX field), 0) }
 
         Field.Opponent ->
-          { field | shiftAt = (-(shiftX field), 0) }
+          { field | shiftAt = (shiftX field, 0) }
   in
     { myField = Field.initialModel Field.My |> shiftField
     , otherField = Field.initialModel Field.Opponent |> shiftField

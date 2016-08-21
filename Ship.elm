@@ -32,7 +32,7 @@ init column length =
           ((length - 1), column) :: createShape (length - 1)
 
   in
-    Model (createShape length) (0, 0) 1 length
+    Model (createShape length) (0, 0) length 1
 
 initBlock : Block
 initBlock =
@@ -70,7 +70,7 @@ blockToForm block =
 rotate : Model -> Model
 rotate ship =
   { ship
-    | shape = List.map (\(row, col) -> (col, -row)) ship.shape
+    | shape = List.map (\(row, col) -> (-col, row)) ship.shape
     , rows = ship.cols
     , cols = ship.rows
   }
