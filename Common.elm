@@ -32,3 +32,9 @@ shiftShip =
     shiftY = (fieldHeight - cellSize) / 2
   in
     (shiftX, shiftY)
+
+type Direction
+  = Left
+  | Up
+  | Right
+  | Down

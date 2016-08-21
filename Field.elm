@@ -2,7 +2,7 @@ module Field exposing (..)
 import Color exposing (Color)
 import Collage exposing (..)
 
-import Common exposing (fieldWidth, fieldHeight)
+import Common exposing (fieldWidth, fieldHeight, Direction)
 import Ship
 
 color : Color
@@ -106,3 +106,20 @@ rotateFirstShip ships =
           otherShips = List.tail ships |> Maybe.withDefault []
         in
           rotated :: otherShips
+
+moveCurrentShip : Model -> Direction -> Model
+moveCurrentShip model direction =
+  let
+    firstShip = List.head model.ships
+
+  in
+    case firstShip of
+      Nothing ->
+        model
+
+      Just ship ->
+        let
+          moved = Ship.moveTo ship direction
+          otherShips = List.tail model.ships |> Maybe.withDefault []
+        in
+          { model | ships = moved :: otherShips }

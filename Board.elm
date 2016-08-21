@@ -1,9 +1,9 @@
 module Board exposing (..)
 
 import Collage exposing (..)
-import Element exposing (..)
+import Element exposing (Element)
 
-import Common exposing (boardFreeSpace, fieldWidth, fieldHeight)
+import Common exposing (boardFreeSpace, fieldWidth, fieldHeight, Direction)
 import Field
 
 type alias Model =
@@ -42,3 +42,7 @@ addNextShip model =
 rotateCurrentShip : Model -> Model
 rotateCurrentShip model =
   { model | myField = Field.rotateCurrentShip model.myField }
+
+moveCurrentShip : Model -> Direction -> Model
+moveCurrentShip model direction =
+  { model | myField = Field.moveCurrentShip model.myField direction }

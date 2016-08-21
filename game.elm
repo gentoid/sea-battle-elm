@@ -4,6 +4,7 @@ import Html.Events exposing (onClick)
 import Element exposing (toHtml)
 import Keyboard
 
+import Common exposing (Direction(..))
 import Board
 
 main : Program Never
@@ -31,6 +32,7 @@ type Msg
   | AddNextShip
   | KeyMsg Keyboard.KeyCode
   | RotateShip
+  | MoveShip Direction
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
@@ -50,6 +52,18 @@ update msg model =
         32 -> -- spacebar
           update RotateShip model
 
+        37 -> -- left arrow
+          update (MoveShip Left) model
+
+        38 -> -- up arrow
+          update (MoveShip Up) model
+
+        39 -> -- right arrow
+          update (MoveShip Right) model
+
+        40 -> -- down arrow
+          update (MoveShip Down) model
+
         _ ->
           (model, Cmd.none)
 
@@ -57,6 +71,11 @@ update msg model =
       ( { model
         | board = Board.rotateCurrentShip model.board
         }
+      , Cmd.none
+      )
+
+    MoveShip direction ->
+      ( { model | board = Board.moveCurrentShip model.board direction }
       , Cmd.none
       )
 
@@ -75,5 +94,5 @@ view model =
 subscriptions : Model -> Sub Msg
 subscriptions model =
   Sub.batch [
-    Keyboard.presses KeyMsg
+    Keyboard.downs KeyMsg
   ]

@@ -4,7 +4,7 @@ import Collage exposing (..)
 import Color exposing (Color)
 import List
 
-import Common exposing (shiftShip, toDimension, cellSize)
+import Common exposing (shiftShip, toDimension, cellSize, Direction(..))
 
 type alias Location = (Int, Int)
 
@@ -71,3 +71,16 @@ rotate ship =
     , rows = ship.cols
     , cols = ship.rows
   }
+
+moveTo : Model -> Direction -> Model
+moveTo model direction =
+  let
+    movement (x, y) =
+      case direction of
+        Left  -> (x - 1, y    )
+        Up    -> (x,     y - 1)
+        Right -> (x + 1, y    )
+        Down  -> (x,     y + 1)
+
+  in
+    { model | shape = List.map movement model.shape, base = movement model.base }
