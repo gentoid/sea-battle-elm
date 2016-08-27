@@ -21,6 +21,7 @@ type alias Field =
   { ships : Ships
   , side : Side
   , shiftAt : (Float, Float)
+  , occupiedArea : List (Int, Int)
   }
 
 type alias Ships =
@@ -51,6 +52,7 @@ initialField side =
       { ships = []
       , side = side
       , shiftAt = (0, 0)
+      , occupiedArea = []
       }
 
   in
@@ -84,7 +86,7 @@ fieldToForm field =
   in
     group
       [ filled fieldColor fieldRect
-      , occupiedForm field.ships
+      , occupiedForm field
       , border
       , group ships
       ]
@@ -92,15 +94,38 @@ fieldToForm field =
 
 addNextShip : Model -> Model
 addNextShip model =
-  { model | myField = addNextShipToField model.myField }
+  { model
+    | myField =
+      model.myField
+        |> addNextShipToField
+        |> updateOccupied
+  }
 
 rotateCurrentShip : Model -> Model
 rotateCurrentShip model =
-  { model | myField = rotateCurrentShipInAField model.myField }
+  { model
+    | myField =
+      model.myField
+        |> rotateCurrentShipInAField
+        |> updateOccupied
+  }
 
 moveCurrentShip : Model -> Direction -> Model
 moveCurrentShip model direction =
-  { model | myField = moveCurrentShipInAField model.myField direction }
+  { model
+    | myField =
+      model.myField
+        |> moveCurrentShipInAField direction
+        |> updateOccupied
+  }
+
+updateOccupied : Field -> Field
+updateOccupied field =
+  { field
+    | occupiedArea =
+      field.ships
+        |> occupiedArea
+  }
 
 addNextShipToField : Field -> Field
 addNextShipToField field =
@@ -140,8 +165,8 @@ rotateFirstShip ships =
         in
           rotated :: otherShips
 
-moveCurrentShipInAField : Field -> Direction -> Field
-moveCurrentShipInAField field direction =
+moveCurrentShipInAField : Direction -> Field -> Field
+moveCurrentShipInAField direction field =
   let
     firstShip = List.head field.ships
 
@@ -189,8 +214,8 @@ occupiedArea ships =
       |> Set.filter inTheField
       |> Set.toList
 
-occupiedForm : Ships -> Form
-occupiedForm ships =
+occupiedForm : Field -> Form
+occupiedForm field =
   let
     translate (row, column) =
       move (toDimension column, toDimension -row) form
@@ -200,7 +225,7 @@ occupiedForm ships =
         |> filled (Color.rgba 50 50 50 0.5)
 
     forms =
-      occupiedArea ships
+      field.occupiedArea
         |> List.map translate
 
   in
