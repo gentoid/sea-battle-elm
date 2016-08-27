@@ -3,8 +3,9 @@ module Board exposing (..)
 import Collage exposing (..)
 import Element exposing (Element)
 import Color exposing (Color)
+import Set exposing (empty, fromList, toList, union)
 
-import Common exposing (boardFreeSpace, fieldWidth, fieldHeight, Direction)
+import Common exposing (boardFreeSpace, fieldWidth, fieldHeight, Direction, toDimension, cellSize, shiftShip)
 import Ship
 
 type alias Model =
@@ -83,6 +84,7 @@ fieldToForm field =
   in
     group
       [ filled fieldColor fieldRect
+      , occupiedForm field.ships
       , border
       , group ships
       ]
@@ -154,3 +156,41 @@ moveCurrentShipInAField field direction =
           otherShips = List.tail field.ships |> Maybe.withDefault []
         in
           { field | ships = moved :: otherShips }
+
+occupiedForm : Ships -> Form
+occupiedForm ships =
+  let
+    pointToOccupied (row, col) =
+      let
+        rangeForRow row =
+          Set.fromList [(row, col - 1), (row, col), (row, col + 1)]
+      in
+        rangeForRow (row + 1)
+          |> Set.union (rangeForRow row)
+          |> Set.union (rangeForRow (row - 1))
+
+    occupied ship =
+      ship.shape
+        |> List.map pointToOccupied
+        |> List.foldl Set.union Set.empty
+
+    allOccupied ships =
+      ships
+        |> List.map occupied
+        |> List.foldl Set.union Set.empty
+
+    translate (row, column) =
+      move (toDimension column, toDimension -row) form
+
+    form =
+      square cellSize
+        |> filled Color.gray
+
+    forms =
+      allOccupied ships
+        |> Set.toList
+        |> List.map translate
+
+  in
+    group forms
+      |> move shiftShip
