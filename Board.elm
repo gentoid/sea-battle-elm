@@ -5,7 +5,7 @@ import Element exposing (Element)
 import Color exposing (Color)
 import Set exposing (empty, fromList, toList, union)
 
-import Common exposing (boardFreeSpace, fieldWidth, fieldHeight, Direction, toDimension, cellSize, shiftShip)
+import Common exposing (boardFreeSpace, fieldWidth, fieldHeight, Direction, toDimension, cellSize, shiftShip, fieldRows, fieldCols)
 import Ship
 
 type alias Model =
@@ -190,6 +190,7 @@ occupiedForm ships =
       List.tail ships
         |> Maybe.withDefault []
         |> allOccupied
+        |> Set.filter (\(row, col) -> row >= 0 && row < fieldRows && col >= 0 && col < fieldCols)
         |> Set.toList
         |> List.map translate
 
