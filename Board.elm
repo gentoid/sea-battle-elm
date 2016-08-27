@@ -187,7 +187,9 @@ occupiedForm ships =
         |> filled Color.gray
 
     forms =
-      allOccupied ships
+      List.tail ships
+        |> Maybe.withDefault []
+        |> allOccupied
         |> Set.toList
         |> List.map translate
 
