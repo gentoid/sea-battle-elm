@@ -157,8 +157,8 @@ moveCurrentShipInAField field direction =
         in
           { field | ships = moved :: otherShips }
 
-occupiedForm : Ships -> Form
-occupiedForm ships =
+occupiedArea : Ships -> List (Int, Int)
+occupiedArea ships =
   let
     pointToOccupied (row, col) =
       let
@@ -179,6 +179,19 @@ occupiedForm ships =
         |> List.map occupied
         |> List.foldl Set.union Set.empty
 
+    inTheField (row, col) =
+      row >= 0 && row < fieldRows && col >= 0 && col < fieldCols
+
+  in
+    List.tail ships
+      |> Maybe.withDefault []
+      |> allOccupied
+      |> Set.filter inTheField
+      |> Set.toList
+
+occupiedForm : Ships -> Form
+occupiedForm ships =
+  let
     translate (row, column) =
       move (toDimension column, toDimension -row) form
 
@@ -187,11 +200,7 @@ occupiedForm ships =
         |> filled (Color.rgba 50 50 50 0.5)
 
     forms =
-      List.tail ships
-        |> Maybe.withDefault []
-        |> allOccupied
-        |> Set.filter (\(row, col) -> row >= 0 && row < fieldRows && col >= 0 && col < fieldCols)
-        |> Set.toList
+      occupiedArea ships
         |> List.map translate
 
   in
