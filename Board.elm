@@ -184,7 +184,7 @@ occupiedForm ships =
 
     form =
       square cellSize
-        |> filled Color.gray
+        |> filled (Color.rgba 50 50 50 0.5)
 
     forms =
       List.tail ships
