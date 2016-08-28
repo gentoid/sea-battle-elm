@@ -22,6 +22,7 @@ type alias Field =
   , side : Side
   , shiftAt : (Float, Float)
   , occupiedArea : List (Int, Int)
+  , validPosition : Bool
   }
 
 type alias Ships =
@@ -53,6 +54,7 @@ initialField side =
       , side = side
       , shiftAt = (0, 0)
       , occupiedArea = []
+      , validPosition = True
       }
 
   in
@@ -99,6 +101,7 @@ addNextShip model =
       model.myField
         |> addNextShipToField
         |> updateOccupied
+        |> checkPosition
   }
 
 rotateCurrentShip : Model -> Model
@@ -108,6 +111,7 @@ rotateCurrentShip model =
       model.myField
         |> rotateCurrentShipInAField
         |> updateOccupied
+        |> checkPosition
   }
 
 moveCurrentShip : Model -> Direction -> Model
@@ -117,6 +121,7 @@ moveCurrentShip model direction =
       model.myField
         |> moveCurrentShipInAField direction
         |> updateOccupied
+        |> checkPosition
   }
 
 updateOccupied : Field -> Field
@@ -125,6 +130,20 @@ updateOccupied field =
     | occupiedArea =
       field.ships
         |> occupiedArea
+  }
+
+checkPosition : Field -> Field
+checkPosition field =
+  { field
+    | validPosition =
+        case List.head field.ships of
+          Nothing ->
+            True
+
+          Just ship ->
+            ship.shape
+              |> List.any (\point -> List.member point field.occupiedArea)
+              |> not
   }
 
 addNextShipToField : Field -> Field
