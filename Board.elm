@@ -84,7 +84,31 @@ fieldToForm field =
   let
     fieldRect = rect fieldWidth fieldHeight
     border = outlined (solid Color.black) fieldRect
-    ships = List.map Ship.toForm field.ships
+    ships =
+      case List.head field.ships of
+        Nothing ->
+          []
+
+        Just currentShip ->
+          -- Debug.crash currentShip
+          let
+            currentShipForm =
+              case field.validPosition of
+                True ->
+                  Ship.toForm currentShip
+
+                False ->
+                  Ship.toInvalidForm currentShip
+
+            otherShipForms =
+              case List.tail field.ships of
+                Nothing ->
+                  []
+
+                Just otherShips ->
+                  List.map Ship.toForm otherShips
+          in
+            List.reverse (currentShipForm :: otherShipForms)
   in
     group
       [ filled fieldColor fieldRect

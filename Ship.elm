@@ -38,11 +38,11 @@ initBlock : Block
 initBlock =
   Block Color.black Color.white
 
-toForm : Model -> Form
-toForm {shape} =
+shipForm : Block -> Model -> Form
+shipForm block {shape} =
   let
     form =
-      blockToForm initBlock
+      blockToForm block
 
     translate (row, column) =
       move (toDimension column, toDimension -row) form
@@ -52,6 +52,18 @@ toForm {shape} =
 
   in
     group forms |> move shiftShip
+
+toForm : Model -> Form
+toForm ship =
+  shipForm initBlock ship
+
+toInvalidForm : Model -> Form
+toInvalidForm ship =
+  let
+    block =
+      Block (Color.rgba 169 3 3 0.5) Color.red
+  in
+    shipForm block ship
 
 blockToForm : Block -> Form
 blockToForm block =
